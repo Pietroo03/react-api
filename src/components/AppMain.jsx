@@ -174,7 +174,7 @@ export default function AppMain() {
                     <button type="button" className="btn btn-primary" onClick={handleClick}>Mostra Posts</button>
                 </div>
 
-                <section className="posts pt-5">
+                <section className="posts py-5">
                     <div className="container">
                         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
 
@@ -182,12 +182,12 @@ export default function AppMain() {
                                 postsData.data.map(post => (
                                     <div className="col" key={post.id}>
                                         <div className="card">
-                                            <h4>
+                                            <h4 className="p-2 ">
                                                 {post.title}
                                             </h4>
-                                            <img src={api_server + post.image} alt="Immagine ricetta" />
-                                            <p>{post.content}</p>
-                                            <div><strong>Tags: </strong> {post.tags.join(', ')}</div>
+                                            <img src={api_server + post.image} alt="Immagine ricetta" max-width={300} max-height={300} />
+                                            <p className="p-2">{post.content}</p>
+                                            <div className="p-2"><strong>Tags: </strong> {post.tags.join(', ')}</div>
                                         </div>
                                     </div>
                                 )) :
