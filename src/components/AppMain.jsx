@@ -66,16 +66,6 @@ export default function AppMain() {
 
     }
 
-    function handleRemove(e) {
-        const removeArticle = Number(e.target.getAttribute('data-index'))
-        console.log(removeArticle);
-
-        const articlesListUpdate = articles.filter((article, index) => index != removeArticle)
-
-        setArticle(articlesListUpdate)
-
-    }
-
     function handleClick(e) {
         fetchData()
     }
@@ -86,6 +76,21 @@ export default function AppMain() {
             .then(data => {
                 console.log(data);
                 setPostsData(data)
+            })
+    }
+
+    function handleRemove(slug) {
+        fetch(`${api_server}${api_endpoint}/${slug}`, {
+            method: 'DELETE',
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                console.log('Post eliminato', data);
+                const updatedArticles = articles.filter(article => article.slug !== slug)
+                setArticle(updatedArticles)
+            })
+            .catch(error => {
+                console.error(error);
             })
     }
 
@@ -207,6 +212,9 @@ export default function AppMain() {
                                             <img src={api_server + post.image} alt="Immagine ricetta" max-width={300} max-height={300} />
                                             <p className="p-2">{post.content}</p>
                                             <div className="p-2"><strong>Tags: </strong> {post.tags.join(', ')}</div>
+                                            <div className="text-center pb-4">
+                                                <button onClick={() => handleRemove(post.slug)} className="btn btn-danger">Rimuovi</button>
+                                            </div>
                                         </div>
                                     </div>
                                 )) :
@@ -246,9 +254,7 @@ export default function AppMain() {
                 <div><strong>Stato: </strong>{article.published ? 'Da Pubblicare' : 'Da non Pubblicare'}</div>
             </div>
 
-            <div>
-                <button onClick={handleRemove} data-index={index} className="btn btn-danger">Rimuovi</button>
-            </div>
+            
         </li>
 
     )}
