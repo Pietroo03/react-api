@@ -1,4 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+
+const api_server = 'http://127.0.0.1:3000'
+const api_endpoint = '/posts'
 const articlesList = []
 
 export default function AppMain() {
