@@ -56,6 +56,7 @@ export default function AppMain() {
                 setNewContent('')
                 setNewCategory('')
                 setIsPublished(false)
+                setNewTag([])
             })
             .catch(error => {
                 console.error(error);
