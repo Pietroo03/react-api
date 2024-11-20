@@ -24,7 +24,7 @@ export default function AppMain() {
     }
 
     function addArticle(e) {
-        e.preventDefault(e)
+        e.preventDefault()
 
         const newArticleData = {
             title: newTitle,
@@ -35,16 +35,33 @@ export default function AppMain() {
             tags: newTag
         }
 
-        setArticle([
-            ...articles,
-            newArticleData
-        ])
+        fetch(api_server + api_endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newArticleData),
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                console.log('Articolo aggiunto', data);
 
-        setNewTitle('')
-        setNewImage('')
-        setNewContent('')
-        setNewCategory('')
-        setIsPublished(false)
+                setArticle([
+                    ...articles,
+                    newArticleData
+                ])
+
+                setNewTitle('')
+                setNewImage('')
+                setNewContent('')
+                setNewCategory('')
+                setIsPublished(false)
+            })
+            .catch(error => {
+                console.error(error);
+
+            })
+
     }
 
     function handleRemove(e) {
