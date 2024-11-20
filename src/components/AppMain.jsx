@@ -13,6 +13,7 @@ export default function AppMain() {
     const [newCategory, setNewCategory] = useState('')
     const [isPublished, setIsPublished] = useState(false)
     const [newTag, setNewTag] = useState([])
+    const [postsData, setPostsData] = useState({})
 
     const tagList = ['Educativo', 'Divertente', 'Noioso', 'Complicato', 'Esaurito']
 
@@ -54,6 +55,19 @@ export default function AppMain() {
 
         setArticle(articlesListUpdate)
 
+    }
+
+    function handleClick(e) {
+        fetchData()
+    }
+
+    function fetchData(url = api_server + api_endpoint) {
+        fetch(url)
+            .then(resp => resp.json())
+            .then(data => {
+                console.log(data);
+                setPostsData(data)
+            })
     }
 
     return (
@@ -155,26 +169,33 @@ export default function AppMain() {
 
                 </form>
 
-                <h2>Articles List</h2>
-                <ul className="list-group">
-                    {articles.map((article, index) =>
-                        <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <div>Titolo: <strong>{article.title}</strong></div>
-                                <img src={article.image} alt="" />
-                                <div>{article.content}</div>
-                                <div><strong>Categoria: </strong>{article.category}</div>
-                                <div><strong>Tags: </strong>{article.tags.join(', ')}</div>
-                                <div><strong>Stato: </strong>{article.published ? 'Da Pubblicare' : 'Da non Pubblicare'}</div>
-                            </div>
+                <h2 className="mt-4">Articles List</h2>
+                <div className="text-center pt-4">
+                    <button type="button" className="btn btn-primary" onClick={handleClick}>Mostra Posts</button>
+                </div>
 
-                            <div>
-                                <button onClick={handleRemove} data-index={index} className="btn btn-danger">Rimuovi</button>
-                            </div>
-                        </li>
+                <section className="posts pt-5">
+                    <div className="container">
+                        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
 
-                    )}
-                </ul>
+                            {postsData.data ?
+                                postsData.data.map(post => (
+                                    <div className="col" key={post.id}>
+                                        <div className="card">
+                                            <h4>
+                                                {post.title}
+                                            </h4>
+                                            <img src={api_server + post.image} alt="Immagine ricetta" />
+                                            <p>{post.content}</p>
+                                            <div><strong>Tags: </strong> {post.tags.join(', ')}</div>
+                                        </div>
+                                    </div>
+                                )) :
+                                <p>Premi il pulsante per visualizzare i posts</p>
+                            }
+                        </div>
+                    </div>
+                </section>
 
             </div>
 
@@ -183,3 +204,33 @@ export default function AppMain() {
     )
 
 }
+
+
+
+
+
+
+
+
+
+
+
+{/* <ul className="list-group">
+    {articles.map((article, index) =>
+        <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <div>Titolo: <strong>{article.title}</strong></div>
+                <img src={article.image} alt="" />
+                <div>{article.content}</div>
+                <div><strong>Categoria: </strong>{article.category}</div>
+                <div><strong>Tags: </strong>{article.tags.join(', ')}</div>
+                <div><strong>Stato: </strong>{article.published ? 'Da Pubblicare' : 'Da non Pubblicare'}</div>
+            </div>
+
+            <div>
+                <button onClick={handleRemove} data-index={index} className="btn btn-danger">Rimuovi</button>
+            </div>
+        </li>
+
+    )}
+</ul> */}
