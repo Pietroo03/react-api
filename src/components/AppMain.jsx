@@ -57,6 +57,7 @@ export default function AppMain() {
                 setNewCategory('')
                 setIsPublished(false)
                 setNewTag([])
+                fetchData()
             })
             .catch(error => {
                 console.error(error);
