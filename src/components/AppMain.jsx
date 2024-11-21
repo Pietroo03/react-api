@@ -69,6 +69,7 @@ export default function AppMain() {
     useEffect(() => {
         fetchData()
     }, [])
+
     function fetchData(url = api_server + api_endpoint) {
         fetch(url)
             .then(resp => resp.json())
@@ -78,19 +79,24 @@ export default function AppMain() {
             })
     }
 
-    function handleRemove(slug) {
-        fetch(`${api_server}${api_endpoint}/${slug}`, {
+    function handleRemove(e) {
+
+        const deletePost = String(e.target.getAttribute('data-index'))
+        console.log(deletePost);
+
+        fetch(`${api_server}${api_endpoint}/${deletePost}`, {
             method: 'DELETE',
         })
             .then(resp => resp.json())
             .then(data => {
                 console.log('Post eliminato', data);
-                const updatedArticles = articles.filter(article => article.slug !== slug)
+                const updatedArticles = articles.filter(article => article.slug !== deletePost)
                 setArticle(updatedArticles)
             })
             .catch(error => {
                 console.error(error);
             })
+
     }
 
     return (
@@ -209,7 +215,7 @@ export default function AppMain() {
                                             <p className="p-2">{post.content}</p>
                                             <div className="p-2"><strong>Tags: </strong> {post.tags.join(', ')}</div>
                                             <div className="text-center pb-4">
-                                                <button onClick={() => handleRemove(post.slug)} className="btn btn-danger">Rimuovi</button>
+                                                <button onClick={handleRemove} data-index={post.slug} className="btn btn-danger">Rimuovi</button>
                                             </div>
                                         </div>
                                     </div>
