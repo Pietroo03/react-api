@@ -223,17 +223,19 @@ export default function AppMain() {
                             {postsData.data ?
                                 postsData.data.map((post, index) => (
                                     <div className="col" key={post.index}>
-                                        <div className="card">
-                                            <h4 className="p-2 ">
-                                                {post.title}
-                                            </h4>
-                                            <img src={api_server + post.image} alt="Immagine ricetta" max-width={300} max-height={300} />
-                                            <p className="p-2">{post.content}</p>
-                                            <div className="p-2"><strong>Tags: </strong> {post.tags.join(', ')}</div>
-                                            <div className="text-center pb-4">
-                                                <button onClick={handleRemove} data-index={post.slug} className="btn btn-danger">Rimuovi</button>
+
+                                        <div className="card h-100 d-flex">
+                                            <img src={api_server + post.image} className="card-img-top" alt="..." />
+                                            <div className="card-body d-flex flex-column">
+                                                <h5 className="card-title">{post.title}</h5>
+                                                <p className="card-text">{post.content}</p>
+                                                <div className="p-2"><strong>Tags: </strong> {post.tags.join(', ')}</div>
+                                                <div className="text-center p-4 mt-auto">
+                                                    <button onClick={handleRemove} data-index={post.slug} className="btn btn-danger">Rimuovi</button>
+                                                </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 )) :
                                 <p>Premi il pulsante per visualizzare i posts</p>
@@ -242,11 +244,10 @@ export default function AppMain() {
                     </div>
                 </section>
 
-            </div>
+            </div >
 
-        </main>
+        </main >
 
     )
 
 }
-
