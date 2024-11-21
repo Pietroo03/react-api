@@ -73,7 +73,6 @@ export default function AppMain() {
 
     }
 
-
     function fetchData(url = api_server + api_endpoint) {
         fetch(url)
             .then(resp => resp.json())
@@ -109,7 +108,6 @@ export default function AppMain() {
                 console.error('errore nell eliminare il post: ', error);
                 fetchData()
             })
-
     }
 
     useEffect(() => {
@@ -124,6 +122,7 @@ export default function AppMain() {
                 <h2>Articles</h2>
 
                 <form onSubmit={addArticle}>
+
                     <div className="mb-3 input-titolo">
                         <label htmlFor="title" className="form-label">Titolo</label>
 
