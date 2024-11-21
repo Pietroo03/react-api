@@ -5,7 +5,6 @@ const api_endpoint = '/posts'
 
 export default function AppMain() {
 
-    const [articles, setArticle] = useState([])
     const [formData, setFormData] = useState({
         title: '',
         image: '',
@@ -75,10 +74,6 @@ export default function AppMain() {
     }
 
 
-    useEffect(() => {
-        fetchData()
-    }, [])
-
     function fetchData(url = api_server + api_endpoint) {
         fetch(url)
             .then(resp => resp.json())
@@ -97,6 +92,10 @@ export default function AppMain() {
         const deletePost = e.target.getAttribute("data-index")
         console.log('elimino il post con slug:', deletePost);
 
+        setPostsData(prevData => ({
+            ...prevData,
+            data: prevData.data.filter(post => post.slug !== deletePost)
+        }))
 
         fetch(`${api_server}${api_endpoint}/${deletePost}`, {
             method: 'DELETE',
@@ -105,18 +104,17 @@ export default function AppMain() {
             .then((data) => {
                 console.log('Post eliminato', data);
 
-                setPostsData(prevData => ({
-                    ...prevData,
-                    data: prevData.data.filter(post => post.slug !== deletePost)
-                }))
-
-                fetchData()
             })
             .catch(error => {
                 console.error('errore nell eliminare il post: ', error);
+                fetchData()
             })
 
     }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
 
     return (
 
@@ -224,8 +222,8 @@ export default function AppMain() {
                         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
 
                             {postsData.data ?
-                                postsData.data.map(post => (
-                                    <div className="col" key={post.id}>
+                                postsData.data.map((post, index) => (
+                                    <div className="col" key={post.index}>
                                         <div className="card">
                                             <h4 className="p-2 ">
                                                 {post.title}
