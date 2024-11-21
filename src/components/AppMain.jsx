@@ -2,38 +2,48 @@ import { useState, useEffect } from "react"
 
 const api_server = 'http://127.0.0.1:3000'
 const api_endpoint = '/posts'
-const articlesList = []
 
 export default function AppMain() {
 
-    const [articles, setArticle] = useState(articlesList)
-    const [newTitle, setNewTitle] = useState('')
-    const [newImage, setNewImage] = useState('')
-    const [newContent, setNewContent] = useState('')
-    const [newCategory, setNewCategory] = useState('')
-    const [isPublished, setIsPublished] = useState(false)
-    const [newTag, setNewTag] = useState([])
+    const [articles, setArticle] = useState([])
+    const [formData, setFormData] = useState({
+        title: '',
+        image: '',
+        content: '',
+        category: '',
+        published: false,
+        tags: []
+    })
     const [postsData, setPostsData] = useState({})
-
     const tagList = ['Educativo', 'Divertente', 'Noioso', 'Complicato', 'Esaurito']
 
     function handleTag(tag) {
-        setNewTag((prevTags) =>
-            prevTags.includes(tag) ? prevTags.filter((t) => t !== tag) : [...prevTags, tag]
-        )
+        setFormData((prevData) => ({
+            ...prevData,
+            tags: prevData.tags.includes(tag)
+                ? prevData.tags.filter((t) => t !== tag)
+                : [...prevData, tag]
+        }))
     }
 
     function addArticle(e) {
         e.preventDefault()
 
         const newArticleData = {
-            title: newTitle,
-            image: newImage,
-            content: newContent,
-            category: newCategory,
-            published: isPublished,
-            tags: newTag
+            title: formData.title,
+            image: formData.image,
+            content: formData.content,
+            slug: formData.category,
+            published: formData.published,
+            tags: formData.tags
         }
+
+        console.log(newArticleData);
+
+        setPostsData(prevData => ({
+            ...prevData,
+            data: [...prevData.data, newArticleData]
+        }))
 
         fetch(api_server + api_endpoint, {
             method: 'POST',
@@ -43,28 +53,27 @@ export default function AppMain() {
             body: JSON.stringify(newArticleData),
         })
             .then(resp => resp.json())
-            .then(data => {
+            .then(() => {
                 console.log('Articolo aggiunto', data);
 
-                setArticle([
-                    ...articles,
-                    newArticleData
-                ])
-
-                setNewTitle('')
-                setNewImage('')
-                setNewContent('')
-                setNewCategory('')
-                setIsPublished(false)
-                setNewTag([])
                 fetchData()
+
             })
             .catch(error => {
                 console.error(error);
-
             })
 
+        setFormData({
+            title: '',
+            image: '',
+            content: '',
+            category: '',
+            published: false,
+            tags: []
+        })
+
     }
+
 
     useEffect(() => {
         fetchData()
@@ -77,24 +86,34 @@ export default function AppMain() {
                 console.log(data);
                 setPostsData(data)
             })
+            .catch(error => {
+                console.error('errore nel recuper dati', error);
+
+            })
     }
 
     function handleRemove(e) {
 
-        const deletePost = String(e.target.getAttribute('data-index'))
-        console.log(deletePost);
+        const deletePost = e.target.getAttribute("data-index")
+        console.log('elimino il post con slug:', deletePost);
+
 
         fetch(`${api_server}${api_endpoint}/${deletePost}`, {
             method: 'DELETE',
         })
             .then(resp => resp.json())
-            .then(data => {
+            .then((data) => {
                 console.log('Post eliminato', data);
-                const updatedArticles = articles.filter(article => article.slug !== deletePost)
-                setArticle(updatedArticles)
+
+                setPostsData(prevData => ({
+                    ...prevData,
+                    data: prevData.data.filter(post => post.slug !== deletePost)
+                }))
+
+                fetchData()
             })
             .catch(error => {
-                console.error(error);
+                console.error('errore nell eliminare il post: ', error);
             })
 
     }
@@ -116,8 +135,8 @@ export default function AppMain() {
                                 placeholder="Aggiungi Titolo"
                                 aria-label="Recipient's title"
                                 aria-describedby="button-addon2"
-                                value={newTitle}
-                                onChange={e => setNewTitle(e.target.value)} />
+                                value={formData.title}
+                                onChange={e => setFormData({ ...formData, title: e.target.value })} />
                         </div>
 
                     </div>
@@ -131,8 +150,8 @@ export default function AppMain() {
                                 placeholder="Aggiungi link Immagine"
                                 aria-label="Recipient's image"
                                 aria-describedby="button-addon2"
-                                value={newImage}
-                                onChange={e => setNewImage(e.target.value)} />
+                                value={formData.image}
+                                onChange={e => setFormData({ ...formData, image: e.target.value })} />
                         </div>
 
                     </div>
@@ -146,8 +165,8 @@ export default function AppMain() {
                                 placeholder="Aggiungi Contenuto"
                                 aria-label="Recipient's content"
                                 aria-describedby="button-addon2"
-                                value={newContent}
-                                onChange={e => setNewContent(e.target.value)} />
+                                value={formData.content}
+                                onChange={e => setFormData({ ...formData, content: e.target.value })} />
                         </div>
 
                     </div>
@@ -156,12 +175,13 @@ export default function AppMain() {
                         <label htmlFor="category" className="form-label">Categoria</label>
                         <select id="inputState"
                             className="form-select"
-                            value={newCategory}
-                            onChange={e => setNewCategory(e.target.value)}>
-                            <option>Formativo</option>
-                            <option>Dibattito</option>
-                            <option>Ludico</option>
-                            <option>Q&A</option>
+                            value={formData.category}
+                            onChange={e => setFormData({ ...formData, category: e.target.value })}>
+                            <option>Seleziona una categoria</option>
+                            <option>Antipasto</option>
+                            <option>Primo Piatto</option>
+                            <option>Secondo</option>
+                            <option>Dolce</option>
                             <option>LETSGOSKI</option>
                         </select>
                     </div>
@@ -173,8 +193,7 @@ export default function AppMain() {
                                 <div key={index} className="form-check form-check-inline">
                                     <input className="form-check-input"
                                         type="checkbox"
-                                        id={index}
-                                        checked={newTag.includes(tag)}
+                                        checked={formData.tags.includes(tag)}
                                         onChange={() => handleTag(tag)} />
                                     <label htmlFor="tags" className="form-check-label">{tag}</label>
                                 </div>
@@ -187,12 +206,12 @@ export default function AppMain() {
                         <input className="form-check-input ms-2 "
                             type="checkbox"
                             id="published"
-                            checked={isPublished}
-                            onChange={e => setIsPublished(e.target.checked)} />
+                            checked={formData.published}
+                            onChange={e => setFormData({ ...formData, published: e.target.checked })} />
                     </div>
 
                     <div className="text-center">
-                        <button className="btn btn-primary" type="submit" id="button-addon2">Aggiungi Post</button>
+                        <button className="btn btn-primary" type="submit">Aggiungi Post</button>
                     </div>
 
 
@@ -234,30 +253,3 @@ export default function AppMain() {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-{/* <ul className="list-group">
-    {articles.map((article, index) =>
-        <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-                <div>Titolo: <strong>{article.title}</strong></div>
-                <img src={article.image} alt="" />
-                <div>{article.content}</div>
-                <div><strong>Categoria: </strong>{article.category}</div>
-                <div><strong>Tags: </strong>{article.tags.join(', ')}</div>
-                <div><strong>Stato: </strong>{article.published ? 'Da Pubblicare' : 'Da non Pubblicare'}</div>
-            </div>
-
-            
-        </li>
-
-    )}
-</ul> */}
