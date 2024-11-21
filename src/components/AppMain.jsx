@@ -66,10 +66,9 @@ export default function AppMain() {
 
     }
 
-    function handleClick(e) {
+    useEffect(() => {
         fetchData()
-    }
-
+    }, [])
     function fetchData(url = api_server + api_endpoint) {
         fetch(url)
             .then(resp => resp.json())
@@ -194,9 +193,6 @@ export default function AppMain() {
                 </form>
 
                 <h2 className="mt-4">Articles List</h2>
-                <div className="text-center pt-4">
-                    <button type="button" className="btn btn-primary" onClick={handleClick}>Mostra Posts</button>
-                </div>
 
                 <section className="posts py-5">
                     <div className="container">
