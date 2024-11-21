@@ -14,7 +14,7 @@ export default function AppMain() {
         tags: []
     })
     const [postsData, setPostsData] = useState({})
-    const tagList = ['Educativo', 'Divertente', 'Noioso', 'Complicato', 'Esaurito']
+    const tagList = ['Buono', 'Facile', 'Veloce', 'Complicato', 'Avanzato']
 
     function handleTag(tag) {
         setFormData((prevData) => ({
