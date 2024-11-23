@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import AddPost from "./MainSections/AddPost"
+import AddPost from "./MainSections/AddPostForm"
 
 const api_server = 'http://127.0.0.1:3000'
 const api_endpoint = '/posts'
