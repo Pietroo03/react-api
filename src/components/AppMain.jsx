@@ -119,14 +119,14 @@ export default function AppMain() {
 
     return (
 
-        <main>
+        <main className="bg-light py-5">
 
-            <div className="container">
-                <h2>Add Post</h2>
+            <div className="container bg-white p-5 shadow rounded">
+                <h2 className="mb-4 text-primary">Add Post</h2>
 
                 <AddPost addNewPost={addNewPost} formData={formData} setFormData={setFormData} tagList={tagList} handleTag={handleTag} />
 
-                <h2 className="mt-4">Posts List</h2>
+                <h2 className="mt-4 text-primary">Posts List</h2>
 
                 <PostsList postsData={postsData} handleRemove={handleRemove} api_server={api_server} />
 
