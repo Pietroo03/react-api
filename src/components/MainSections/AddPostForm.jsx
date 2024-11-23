@@ -4,7 +4,7 @@ export default function addPost({ addNewPost, formData, setFormData, tagList, ha
         <form onSubmit={addNewPost}>
 
             <div className="mb-3 input-titolo">
-                <label htmlFor="title" className="form-label">Titolo</label>
+                <label htmlFor="title" className="form-label"><strong>Titolo</strong></label>
 
                 <div className="input-group mb-3">
                     <input type="text"
@@ -19,7 +19,7 @@ export default function addPost({ addNewPost, formData, setFormData, tagList, ha
             </div>
 
             <div className="mb-3 input-immagine">
-                <label htmlFor="image" className="form-label">Immagine</label>
+                <label htmlFor="image" className="form-label"><strong>Immagine</strong></label>
 
                 <div className="input-group mb-3">
                     <input type="text"
@@ -34,7 +34,7 @@ export default function addPost({ addNewPost, formData, setFormData, tagList, ha
             </div>
 
             <div className="mb-3 input-contenuto">
-                <label htmlFor="content" className="form-label">Aggiungi Contenuto</label>
+                <label htmlFor="content" className="form-label"><strong>Aggiungi Contenuto</strong></label>
 
                 <div className="input-group mb-3">
                     <input type="text"
@@ -49,7 +49,7 @@ export default function addPost({ addNewPost, formData, setFormData, tagList, ha
             </div>
 
             <div className="mb-3 input-categoria">
-                <label htmlFor="category" className="form-label">Categoria</label>
+                <label htmlFor="category" className="form-label"><strong>Categoria</strong></label>
                 <select id="inputState"
                     className="form-select"
                     value={formData.category}
@@ -64,7 +64,7 @@ export default function addPost({ addNewPost, formData, setFormData, tagList, ha
             </div>
 
             <div className="mb-3">
-                <label htmlFor="tags" className="form-label">Tags</label>
+                <label htmlFor="tags" className="form-label"><strong>Tags</strong></label>
                 <div>
                     {tagList.map((tag, index) => (
                         <div key={index} className="form-check form-check-inline">
@@ -79,7 +79,7 @@ export default function addPost({ addNewPost, formData, setFormData, tagList, ha
             </div>
 
             <div className="mb-3">
-                <label className="form-check-label" htmlFor="published">Da Pubblicare</label>
+                <label className="form-check-label" htmlFor="published"><strong>Da Pubblicare</strong></label>
                 <input className="form-check-input ms-2 "
                     type="checkbox"
                     id="published"
