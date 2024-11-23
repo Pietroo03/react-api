@@ -92,7 +92,7 @@ export default function AppMain() {
 
     function handleRemove(e) {
 
-        const deletePost = e.target.getAttribute("data-index")
+        const deletePost = e.target.getAttribute("data-slug")
 
         setPostsData(prevData => ({
             ...prevData,

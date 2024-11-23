@@ -16,7 +16,7 @@ export default function PostsList({ postsData, handleRemove, api_server }) {
                                         <p className="card-text">{post.content}</p>
                                         <div className="p-2"><strong>Tags: </strong> {post.tags.join(', ')}</div>
                                         <div className="text-center p-4 mt-auto">
-                                            <button onClick={handleRemove} data-index={post.slug} className="btn btn-danger">Rimuovi</button>
+                                            <button onClick={handleRemove} data-slug={post.slug} className="btn btn-danger">Rimuovi</button>
                                         </div>
                                     </div>
                                 </div>
